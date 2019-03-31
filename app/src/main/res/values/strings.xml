@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Spelling:Frequency</string>
+    <string name="action_statistics">Statistics</string>
+
+    <string name="preference_file_key">com.example.spellingfrequency.PREFERENCE_FILE_KEY</string>
+    <string name="defaultTextWordTextView">tap to reveal the word</string>
+    <string name="action_show_favorites">View Favorite</string>
+</resources>

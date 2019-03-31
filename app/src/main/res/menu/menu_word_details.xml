@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.spellingfrequency.UI.WordDetailsActivity">
+    <item
+        android:id="@+id/action_favorite_word_details"
+        android:icon="@drawable/ic_favorite_red"
+        android:title="favorite"
+        app:showAsAction="ifRoom" />
+</menu>

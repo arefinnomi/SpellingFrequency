@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5sp">
+
+
+    <TextView
+        android:id="@+id/status_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1sp"
+        android:background="@drawable/textview"
+        android:gravity="center"
+        android:text="Word Status: "
+        android:textStyle="bold"
+        android:typeface="monospace"
+        android:visibility="visible"
+        app:fontFamily="monospace" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <Button
+            android:id="@+id/mastered_button"
+            style="@style/Base.Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="1sp"
+            android:layout_weight="1"
+            android:background="@drawable/roundedbutton"
+            android:drawableStart="@drawable/ic_skip_next_black_24dp"
+            android:drawableLeft="@drawable/ic_skip_next_black_24dp"
+            android:padding="5sp"
+            android:text="know it" />
+
+
+        <Button
+            android:id="@+id/listen_button"
+            style="@style/Base.Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="1sp"
+            android:layout_weight="1"
+            android:background="@drawable/roundedbutton"
+            android:drawableStart="@drawable/ic_hearing_black_24dp"
+            android:drawableLeft="@drawable/ic_hearing_black_24dp"
+            android:padding="5sp"
+            android:text="listen" />
+
+        <Button
+            android:id="@+id/error_button"
+            style="@style/Base.Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="1sp"
+            android:layout_weight="1"
+            android:background="@drawable/roundedbutton"
+            android:drawableStart="@drawable/ic_skip_next_black_24dp"
+            android:drawableLeft="@drawable/ic_skip_next_black_24dp"
+            android:padding="5sp"
+            android:text="don't know it" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/spellingInput"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="1sp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="spelling"
+            android:inputType="textFilter"
+            android:singleLine="true" />
+
+        <Button
+            android:id="@+id/input_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="1sp"
+            android:background="@drawable/roundedbutton"
+            android:drawableStart="@drawable/ic_check_black_24dp"
+            android:drawableLeft="@drawable/ic_check_black_24dp"
+            android:padding="5sp"
+            android:text="check" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/translation_textview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="1sp"
+        android:layout_weight="10"
+        android:background="@drawable/textview"
+        android:padding="10sp"
+        android:scrollbars="vertical"
+        android:text="translation"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:typeface="monospace"
+        android:visibility="visible"
+        app:fontFamily="monospace" />
+
+    <TextView
+        android:id="@+id/word_textView"
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:layout_margin="1sp"
+        android:background="@drawable/textview"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="@string/defaultTextWordTextView"
+        android:textColor="@color/wordBlur"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:typeface="monospace"
+        android:visibility="visible"
+        app:fontFamily="monospace" />
+
+
+</LinearLayout>
