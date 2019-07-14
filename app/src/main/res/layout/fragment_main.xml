@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/spellingInput"
             android:layout_width="0dp"
             android:layout_height="match_parent"

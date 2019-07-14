@@ -1,8 +1,8 @@
 package com.example.spellingfrequency.database.entity;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Index;
-import android.arch.persistence.room.PrimaryKey;
+import androidx.room.Entity;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
 
 @Entity(tableName = "CurrentWeight", indices = {@Index(value = {"current"}, unique = true)})
 public class CurrentWeightEntity {

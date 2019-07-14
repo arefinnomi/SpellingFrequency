@@ -1,7 +1,7 @@
 package com.example.spellingfrequency.internet;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.example.spellingfrequency.database.AppDatabase;
 import com.example.spellingfrequency.database.entity.CurrentWeightEntity;
