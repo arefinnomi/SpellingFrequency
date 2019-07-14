@@ -6,7 +6,6 @@ import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 
-
 @Entity(tableName = "Antonym", foreignKeys = {
         @ForeignKey(entity = EnglishWordEntity.class, parentColumns = "id", childColumns = "english_id"),
         @ForeignKey(entity = EnglishWordEntity.class, parentColumns = "id", childColumns = "antonym_id")})

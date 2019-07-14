@@ -11,24 +11,24 @@ public class FavoriteWords {
     private List<EnglishWordEntity> englishWordEntities;
     private AppDatabase appDatabase;
 
-    public FavoriteWords(AppDatabase appDatabase){
+    public FavoriteWords(AppDatabase appDatabase) {
         this.appDatabase = appDatabase;
         this.englishWordEntities = new ArrayList<>();
-        englishWordEntities.addAll( Arrays.asList(appDatabase.englishWordDao().loadAllFavoriteAndErrorEnglishWord()));
+        englishWordEntities.addAll(Arrays.asList(appDatabase.englishWordDao().loadAllFavoriteAndErrorEnglishWord()));
     }
 
-    public void update(){
+    public void update() {
         this.englishWordEntities.clear();
-        this.englishWordEntities.addAll( Arrays.asList(appDatabase.englishWordDao().loadAllFavoriteAndErrorEnglishWord()));
+        this.englishWordEntities.addAll(Arrays.asList(appDatabase.englishWordDao().loadAllFavoriteAndErrorEnglishWord()));
     }
 
     public List<EnglishWordEntity> getEnglishWordEntities() {
         return this.englishWordEntities;
     }
 
-    public List<String> getEnglishWords(){
+    public List<String> getEnglishWords() {
         List<String> words = new ArrayList<>();
-        for(EnglishWordEntity englishWordEntity: englishWordEntities){
+        for (EnglishWordEntity englishWordEntity : englishWordEntities) {
             words.add(englishWordEntity.getText());
         }
         return words;

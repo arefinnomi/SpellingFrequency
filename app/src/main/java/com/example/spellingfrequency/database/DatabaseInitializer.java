@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.spellingfrequency.R;
-import com.example.spellingfrequency.database.dao.AntonymDao;
 import com.example.spellingfrequency.database.dao.EnglishWordDao;
 import com.example.spellingfrequency.database.entity.AntonymEntity;
 import com.example.spellingfrequency.database.entity.BanglaWordEntity;
@@ -104,7 +103,7 @@ public class DatabaseInitializer {
         AntonymEntity[] antonymEntities = getAntonymEntitiesFromJson(jsonObjects, englishWordEntities);
         addAntonym(db, antonymEntities);
         antonymEntities = null;
-        Log.d(TAG, "populateWithTestData: antonym added"+db.antonymDao().loadAllAntonym().length);
+        Log.d(TAG, "populateWithTestData: antonym added" + db.antonymDao().loadAllAntonym().length);
 
         //store max min weight
         EnglishWordDao.WeightPojo maxWeight = db.englishWordDao().maxWeight();
@@ -125,7 +124,7 @@ public class DatabaseInitializer {
             JSONObject enInnerOject = jsonObjects.getJSONObject(englishWordEntity.getText());
             JSONObject synonymsObject = enInnerOject.getJSONObject("syn");
             int synonymArrayLen = synonymsObject.length();
-            for(Iterator iterator = synonymsObject.keys(); iterator.hasNext();){
+            for (Iterator iterator = synonymsObject.keys(); iterator.hasNext(); ) {
                 String synonym = (String) iterator.next();
                 if (!englishWordEntityMap.containsKey(synonym)) continue;
                 synonymEntityArrayList.add(new SynonymEntity(englishWordEntity.getId(), englishWordEntityMap.get(synonym).getId(), synonymsObject.getInt(synonym)));
@@ -244,7 +243,7 @@ public class DatabaseInitializer {
         @Override
         protected void onPostExecute(Void aVoid) {
             SharedPreferences sharedPref = context.getSharedPreferences(
-                    context.getString(R.string.preference_file_key), context.MODE_PRIVATE);
+                    context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putBoolean("init", true);
             final boolean commit = editor.commit();

@@ -1,14 +1,11 @@
 package com.example.spellingfrequency.UI;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +20,7 @@ import java.util.Map;
 public class WordDetailsActivity extends AppCompatActivity {
 
     Word word;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +29,7 @@ public class WordDetailsActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar_word_details);
         setSupportActionBar(toolbar);
 
-        String wordString= getIntent().getStringExtra("wordString");
+        String wordString = getIntent().getStringExtra("wordString");
         final AppDatabase appDatabase = AppDatabase.getDatabase(this);
         word = new Word(appDatabase);
         word.loadWord(wordString);
@@ -43,20 +41,20 @@ public class WordDetailsActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_word_details, menu);
-        if(!word.isFavorite()) menu.findItem(R.id.action_favorite_word_details).setIcon(R.drawable.ic_favorite_black);
+        if (!word.isFavorite())
+            menu.findItem(R.id.action_favorite_word_details).setIcon(R.drawable.ic_favorite_black);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_favorite_word_details:{
+            case R.id.action_favorite_word_details: {
                 word.saveFavorite(!word.isFavorite());
-                if(word.isFavorite()){
+                if (word.isFavorite()) {
                     item.setIcon(R.drawable.ic_favorite_red);
                     Toast.makeText(this, "added to favorite", Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     item.setIcon(R.drawable.ic_favorite_black);
                     Toast.makeText(this, "removed from favorite", Toast.LENGTH_SHORT).show();
                 }
@@ -87,7 +85,7 @@ public class WordDetailsActivity extends AppCompatActivity {
             temp.append("\n");
             temp.append(synonymWord.getKey().getText()).append(": ");
             flagFirstWord = true;
-            for(BanglaWordEntity banglaWordEntity: synonymWord.getValue()){
+            for (BanglaWordEntity banglaWordEntity : synonymWord.getValue()) {
                 if (flagFirstWord) {
                     flagFirstWord = false;
 
@@ -104,7 +102,7 @@ public class WordDetailsActivity extends AppCompatActivity {
             temp.append("\n");
             temp.append(antonymWord.getKey().getText()).append(": ");
             flagFirstWord = true;
-            for(BanglaWordEntity banglaWordEntity: antonymWord.getValue()){
+            for (BanglaWordEntity banglaWordEntity : antonymWord.getValue()) {
                 if (flagFirstWord) {
                     flagFirstWord = false;
 

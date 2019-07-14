@@ -10,7 +10,7 @@ public class Statistics {
     private static int due;
     private static AppDatabase appDatabase;
 
-    public Statistics(AppDatabase appDatabase){
+    public Statistics(AppDatabase appDatabase) {
         Statistics.appDatabase = appDatabase;
     }
 
@@ -38,7 +38,7 @@ public class Statistics {
         Statistics.mistaken = mistaken;
     }
 
-    public String update(){
+    public String update() {
         totalWord = appDatabase.englishWordDao().totalEnglishWord();
         mastered = appDatabase.englishWordDao().countMasteredWord();
         mistaken = appDatabase.englishWordDao().countCurrentErrorEnglishWord();
@@ -49,9 +49,9 @@ public class Statistics {
     }
 
     public String toString() {
-        return "total: " + String.valueOf(totalWord)+"\n"
-                +"mastered: "+ String.valueOf(mastered) + "\n"
-                +"mistaken: "+ String.valueOf(mistaken) + "\n"
-                +"New: " + due;
+        return "total: " + totalWord + "\n"
+                + "mastered: " + mastered + "\n"
+                + "mistaken: " + mistaken + "\n"
+                + "New: " + due;
     }
 }

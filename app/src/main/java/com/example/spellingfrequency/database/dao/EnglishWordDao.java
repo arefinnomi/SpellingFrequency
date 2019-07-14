@@ -40,6 +40,9 @@ public interface EnglishWordDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void update(EnglishWordEntity englishWordEntity);
 
+    @Update
+    int updateMulti(EnglishWordEntity... englishWordEntities);
+
     @Query("select *, min(weight)from EnglishWord")
     EnglishWordEntity[] loadMinWeightWord();
 
@@ -62,7 +65,10 @@ public interface EnglishWordDao {
     @Query("Select * from EnglishWord where (repeat != 0 and weight!= id) or favourite = 1")
     EnglishWordEntity[] loadAllFavoriteAndErrorEnglishWord();
 
-    public class WeightPojo {
+    @Query("Select * from EnglishWord where favourite = 1 or id != weight")
+    EnglishWordEntity[] loadAllChanged();
+
+    class WeightPojo {
         public int weight;
     }
 }

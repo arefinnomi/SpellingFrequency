@@ -3,7 +3,6 @@ package com.example.spellingfrequency.UI;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -44,15 +43,16 @@ public class FavoriteListActivity extends ListActivity {
         ListAdapter listAdapter = listView.getAdapter();
         // Get user selected item object.
         Object selectItemObj = listAdapter.getItem(position);
-        String wordString = (String)selectItemObj;
+        String wordString = (String) selectItemObj;
         Intent intent = new Intent(getBaseContext(), WordDetailsActivity.class);
         intent.putExtra("wordString", wordString);
         startActivity(intent);
     }
+
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
-        if(favoriteWords!=null){
+        if (favoriteWords != null) {
             favoriteWords.update();
             listDataAdapter.clear();
             listDataAdapter.addAll(favoriteWords.getEnglishWords());

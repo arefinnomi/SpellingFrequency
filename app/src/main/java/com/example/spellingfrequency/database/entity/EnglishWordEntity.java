@@ -91,7 +91,7 @@ public class EnglishWordEntity {
         @Override
         public int compare(EnglishWordEntity o1, EnglishWordEntity o2) {
             if (o1.getFrequency() == o2.getFrequency()) return o1.getText().compareTo(o2.getText());
-            if(o1.getFrequency() > o2.getFrequency()) return -1;
+            if (o1.getFrequency() > o2.getFrequency()) return -1;
             else return 1;
         }
     }

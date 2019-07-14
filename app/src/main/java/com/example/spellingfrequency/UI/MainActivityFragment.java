@@ -10,7 +10,6 @@ import android.speech.tts.TextToSpeech;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +25,7 @@ import com.example.spellingfrequency.R;
 import com.example.spellingfrequency.database.AppDatabase;
 import com.example.spellingfrequency.database.entity.BanglaWordEntity;
 import com.example.spellingfrequency.database.entity.EnglishWordEntity;
+import com.example.spellingfrequency.internet.Synchronization;
 import com.example.spellingfrequency.model.Statistics;
 import com.example.spellingfrequency.model.Word;
 
@@ -72,7 +72,7 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final AppDatabase appDatabase = AppDatabase.getDatabase(getContext());
-        statistics  = new Statistics(appDatabase);
+        statistics = new Statistics(appDatabase);
         final SharedPreferences sharedPref = getActivity().getSharedPreferences(
                 getString(R.string.preference_file_key), MODE_PRIVATE);
 
@@ -102,6 +102,7 @@ public class MainActivityFragment extends Fragment {
         nowWordDisplayed = false;
         isWordDisplayed = false;
         isUserMisspelled = false;
+
         masteredButton.setEnabled(true);
         errorButton.setEnabled(true);
         speelingInputEditText.setEnabled(true);
@@ -116,16 +117,15 @@ public class MainActivityFragment extends Fragment {
     void checkInputSpelling() {
         String userSpelling = speelingInputEditText.getText().toString();
 
-        if(userSpelling.isEmpty()) return;
+        if (userSpelling.isEmpty()) return;
         isUserMisspelled = !word.getWord().equals(userSpelling.toLowerCase().trim());
         if (isUserMisspelled) {
             masteredButton.setEnabled(false);
             errorButton.setEnabled(true);
             Toast.makeText(getActivity(), "wrong spelling", Toast.LENGTH_SHORT).show();
         } else {
+
             Toast.makeText(getActivity(), "correct spelling", Toast.LENGTH_SHORT).show();
-            errorButton.setEnabled(false);
-            masteredButton.setEnabled(true);
             String temp = Arrays.toString(Character.toChars(10004))
                     + userSpelling
                     + Arrays.toString(Character.toChars(10004));
@@ -164,7 +164,7 @@ public class MainActivityFragment extends Fragment {
                 temp.append("\n");
                 temp.append(synonymWord.getKey().getText()).append(": ");
                 flagFirstWord = true;
-                for(BanglaWordEntity banglaWordEntity: synonymWord.getValue()){
+                for (BanglaWordEntity banglaWordEntity : synonymWord.getValue()) {
                     if (flagFirstWord) {
                         flagFirstWord = false;
 
@@ -181,7 +181,7 @@ public class MainActivityFragment extends Fragment {
                 temp.append("\n");
                 temp.append(antonymWord.getKey().getText()).append(": ");
                 flagFirstWord = true;
-                for(BanglaWordEntity banglaWordEntity: antonymWord.getValue()){
+                for (BanglaWordEntity banglaWordEntity : antonymWord.getValue()) {
                     if (flagFirstWord) {
                         flagFirstWord = false;
 
@@ -209,6 +209,8 @@ public class MainActivityFragment extends Fragment {
                 isWordDisplayed = true;
                 if (nowWordDisplayed) {
                     resetWordTextView();
+                } else if (isUserMisspelled) {
+                    setWordTextView();
                 } else {
                     setWordTextView();
                     speelingInputEditText.setEnabled(false);
@@ -227,8 +229,13 @@ public class MainActivityFragment extends Fragment {
 
         errorButton = view.findViewById(R.id.error_button);
         errorButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
+                if (isUserMisspelled) {
+                    Toast.makeText(getActivity(), "Write correct spelling", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 word.saveCurrentWordStatus(false);
                 load_word_to_view(appDatabase, sharedPref, view);
             }
@@ -292,10 +299,12 @@ public class MainActivityFragment extends Fragment {
                 statisticsDialog.show();
                 return true;
             }
-            case R.id.action_show_favorites:{
+            case R.id.action_show_favorites: {
                 Intent intent = new Intent(getActivity(), FavoriteListActivity.class);
                 startActivity(intent);
-
+            }
+            case R.id.action_sync: {
+                Synchronization.synchronize(getContext());
             }
             default:
                 // If we got here, the user's action was not recognized.

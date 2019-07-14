@@ -14,8 +14,7 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".UI.WordDetailsActivity"
-            android:label="Word">
-        </activity>
+            android:label="Word"></activity>
         <activity
             android:name=".UI.FavoriteListActivity"
             android:label="Favorite Words">
