@@ -6,4 +6,13 @@
     <string name="defaultTextWordTextView">tap to reveal the word</string>
     <string name="action_show_favorites">View Favorite</string>
     <string name="action_sync">Sync</string>
+    <string name="email_address_hint">Email Address</string>
+    <string name="password_hint">Password</string>
+    <string name="master_buttom_text">know it</string>
+    <string name="listen_button_text">listen</string>
+    <string name="errot_button_text">don\'t know it</string>
+    <string name="spelling_input_hint">spelling</string>
+    <string name="input_button_text">check</string>
+    <string name="action_favorite_tittle">favorite</string>
+    <string name="favorite_item_title">favorite</string>
 </resources>

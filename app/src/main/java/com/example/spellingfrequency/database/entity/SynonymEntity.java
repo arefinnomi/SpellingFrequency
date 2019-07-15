@@ -3,9 +3,12 @@ package com.example.spellingfrequency.database.entity;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "Synonym", foreignKeys = {
+@Entity(tableName = "Synonym",
+        indices = {@Index(value = {"english_id"}), @Index(value = {"synonym_id"})},
+        foreignKeys = {
         @ForeignKey(entity = EnglishWordEntity.class, parentColumns = "id", childColumns = "english_id"),
         @ForeignKey(entity = EnglishWordEntity.class, parentColumns = "id", childColumns = "synonym_id")})
 public class SynonymEntity {

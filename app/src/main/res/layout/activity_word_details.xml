@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.WordDetailsActivity">
+    tools:context=".ui.WordDetailsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -37,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50sp"
                 android:layout_margin="1sp"
-                android:background="@drawable/textview"
+                android:background="@drawable/text_view"
                 android:gravity="center"
                 android:singleLine="true"
                 android:text="@string/defaultTextWordTextView"
@@ -51,15 +51,14 @@
 
 
         <TextView
-            android:id="@+id/wordDetails_translation_textview"
+            android:id="@+id/wordDetails_translation_text_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="1sp"
             android:layout_weight="10"
-            android:background="@drawable/textview"
+            android:background="@drawable/text_view"
             android:padding="10sp"
             android:scrollbars="vertical"
-            android:text="translation"
             android:textSize="15sp"
             android:textStyle="bold"
             android:typeface="monospace"

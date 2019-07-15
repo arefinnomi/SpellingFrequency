@@ -8,8 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FavoriteWords {
-    private List<EnglishWordEntity> englishWordEntities;
-    private AppDatabase appDatabase;
+    private final List<EnglishWordEntity> englishWordEntities;
+    private final AppDatabase appDatabase;
 
     public FavoriteWords(AppDatabase appDatabase) {
         this.appDatabase = appDatabase;

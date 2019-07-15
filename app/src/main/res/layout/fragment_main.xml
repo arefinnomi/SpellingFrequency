@@ -24,7 +24,7 @@
             android:drawableStart="@drawable/ic_skip_next_black_24dp"
             android:drawableLeft="@drawable/ic_skip_next_black_24dp"
             android:padding="5sp"
-            android:text="know it" />
+            android:text="@string/master_buttom_text" />
 
 
         <Button
@@ -38,7 +38,7 @@
             android:drawableStart="@drawable/ic_hearing_black_24dp"
             android:drawableLeft="@drawable/ic_hearing_black_24dp"
             android:padding="5sp"
-            android:text="listen" />
+            android:text="@string/listen_button_text" />
 
         <Button
             android:id="@+id/error_button"
@@ -51,7 +51,7 @@
             android:drawableStart="@drawable/ic_skip_next_black_24dp"
             android:drawableLeft="@drawable/ic_skip_next_black_24dp"
             android:padding="5sp"
-            android:text="don't know it" />
+            android:text="@string/errot_button_text" />
     </LinearLayout>
 
     <LinearLayout
@@ -60,13 +60,13 @@
         android:orientation="horizontal">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/spellingInput"
+            android:id="@+id/spelling_input"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="1sp"
             android:layout_weight="1"
             android:gravity="center"
-            android:hint="spelling"
+            android:hint="@string/spelling_input_hint"
             android:inputType="textVisiblePassword"
             android:singleLine="true" />
 
@@ -79,7 +79,7 @@
             android:drawableStart="@drawable/ic_check_black_24dp"
             android:drawableLeft="@drawable/ic_check_black_24dp"
             android:padding="5sp"
-            android:text="check" />
+            android:text="@string/input_button_text" />
 
     </LinearLayout>
 
@@ -90,10 +90,9 @@
         android:layout_height="0dp"
         android:layout_margin="1sp"
         android:layout_weight="10"
-        android:background="@drawable/textview"
+        android:background="@drawable/text_view"
         android:padding="10sp"
         android:scrollbars="vertical"
-        android:text="translation"
         android:textSize="15sp"
         android:textStyle="bold"
         android:typeface="monospace"
@@ -105,7 +104,7 @@
         android:layout_width="match_parent"
         android:layout_height="50sp"
         android:layout_margin="1sp"
-        android:background="@drawable/textview"
+        android:background="@drawable/text_view"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"

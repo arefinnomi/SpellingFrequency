@@ -1,4 +1,4 @@
-package com.example.spellingfrequency.UI;
+package com.example.spellingfrequency.ui;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,7 +21,7 @@ import java.util.Map;
 
 public class WordDetailsActivity extends AppCompatActivity {
 
-    Word word;
+    private Word word;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,25 +50,22 @@ public class WordDetailsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_favorite_word_details: {
-                SharedPreferences sharedPref = this.getSharedPreferences(
-                        getString(R.string.preference_file_key), MODE_PRIVATE);;
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putBoolean("dbModified", true);
-                editor.apply();
-                word.saveFavorite(!word.isFavorite());
-                if (word.isFavorite()) {
-                    item.setIcon(R.drawable.ic_favorite_red);
-                    Toast.makeText(this, "added to favorite", Toast.LENGTH_SHORT).show();
-                } else {
-                    item.setIcon(R.drawable.ic_favorite_black);
-                    Toast.makeText(this, "removed from favorite", Toast.LENGTH_SHORT).show();
-                }
+        if (item.getItemId() == R.id.action_favorite_word_details) {
+            SharedPreferences sharedPref = this.getSharedPreferences(
+                    getString(R.string.preference_file_key), MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putBoolean("dbModified", true);
+            editor.apply();
+            word.saveFavorite(!word.isFavorite());
+            if (word.isFavorite()) {
+                item.setIcon(R.drawable.ic_favorite_red);
+                Toast.makeText(this, "added to favorite", Toast.LENGTH_SHORT).show();
+            } else {
+                item.setIcon(R.drawable.ic_favorite_black);
+                Toast.makeText(this, "removed from favorite", Toast.LENGTH_SHORT).show();
             }
-            default:
-                return super.onOptionsItemSelected(item);
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void load_word_to_view() {
@@ -120,7 +117,7 @@ public class WordDetailsActivity extends AppCompatActivity {
             }
             temp.append(" ");
         }
-        TextView translationTextView = findViewById(R.id.wordDetails_translation_textview);
+        TextView translationTextView = findViewById(R.id.wordDetails_translation_text_view);
         translationTextView.setText(temp.toString());
         translationTextView.setMovementMethod(new ScrollingMovementMethod());
 

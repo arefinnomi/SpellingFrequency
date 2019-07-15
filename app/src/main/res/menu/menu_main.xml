@@ -1,11 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.spellingfrequency.UI.MainActivity">
+    tools:context="com.example.spellingfrequency.ui.MainActivity">
     <item
         android:id="@+id/action_favorite"
         android:icon="@drawable/ic_favorite_black"
-        android:title="favorite"
+        android:title="@string/action_favorite_tittle"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_statistics"

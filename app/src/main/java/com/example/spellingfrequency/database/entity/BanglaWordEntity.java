@@ -8,7 +8,7 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "BanglaWord",
-        indices = {@Index(value = {"text"})},
+        indices = {@Index(value = {"text"}),@Index(value = {"english_id"})},
         foreignKeys = @ForeignKey(entity = EnglishWordEntity.class, parentColumns = "id", childColumns = "english_id"))
 public class BanglaWordEntity {
     @NonNull

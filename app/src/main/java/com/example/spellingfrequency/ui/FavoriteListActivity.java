@@ -1,4 +1,4 @@
-package com.example.spellingfrequency.UI;
+package com.example.spellingfrequency.ui;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -16,8 +16,8 @@ import com.example.spellingfrequency.model.FavoriteWords;
 
 public class FavoriteListActivity extends ListActivity {
 
-    ArrayAdapter<String> listDataAdapter;
-    FavoriteWords favoriteWords = null;
+    private ArrayAdapter<String> listDataAdapter;
+    private FavoriteWords favoriteWords = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

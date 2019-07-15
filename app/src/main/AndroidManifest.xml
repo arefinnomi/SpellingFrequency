@@ -13,15 +13,15 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".UI.WordDetailsActivity"
-            android:label="Word"></activity>
+            android:name=".ui.WordDetailsActivity"
+            android:label="Word" />
         <activity
-            android:name=".UI.FavoriteListActivity"
+            android:name=".ui.FavoriteListActivity"
             android:label="Favorite Words">
 
         </activity>
         <activity
-            android:name=".UI.MainActivity"
+            android:name=".ui.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>

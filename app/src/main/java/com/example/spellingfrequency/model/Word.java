@@ -19,9 +19,9 @@ import static java.lang.Math.round;
 public class Word {
     private final static Random random = new Random();
     private BanglaWordEntity[] banglaWordEntities;
-    private Map<EnglishWordEntity, BanglaWordEntity[]> synonymWordsWithBangla = new LinkedHashMap<>();
-    private Map<EnglishWordEntity, BanglaWordEntity[]> antonymWordsWithBangla = new HashMap<>();
-    private AppDatabase appDatabase;
+    private final Map<EnglishWordEntity, BanglaWordEntity[]> synonymWordsWithBangla = new LinkedHashMap<>();
+    private final Map<EnglishWordEntity, BanglaWordEntity[]> antonymWordsWithBangla = new HashMap<>();
+    private final AppDatabase appDatabase;
     private EnglishWordEntity englishWordEntity;
 
 
@@ -66,8 +66,7 @@ public class Word {
     }
 
     public void loadWord(String word) {
-        EnglishWordEntity englishWordEntities = appDatabase.englishWordDao().loadEnglishWordByText(word);
-        this.englishWordEntity = englishWordEntities;
+        this.englishWordEntity = appDatabase.englishWordDao().loadEnglishWordByText(word);
         this.banglaWordEntities = this.appDatabase.banglaWordDao().loadBanglaWordsByEnglishWordId(this.englishWordEntity.getId());
         EnglishWordEntity[] synonymWords = this.appDatabase.synonymDao().loadSynonymByWord(this.englishWordEntity.getId());
         for (EnglishWordEntity synonymWord : synonymWords) {
@@ -113,7 +112,7 @@ public class Word {
 
     }
 
-    public int getRandomNumberInts(int min, int max) {
+    private int getRandomNumberInts(int min, int max) {
         return random.nextInt((max - min) + 1) + min;
     }
 

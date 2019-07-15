@@ -91,19 +91,16 @@ public class DatabaseInitializer {
         englishWordEntities = db.englishWordDao().loadAllEnglishWord();
         BanglaWordEntity[] banglaWordEntities = getBanglaWordEntitiesFromJson(jsonObjects, englishWordEntities);
         addBanglaWord(db, banglaWordEntities);
-        banglaWordEntities = null;
         Log.d(TAG, "populateWithTestData: bangla word added");
 
         //store synonym in database
         SynonymEntity[] synonymEntities = getSynonymEntitiesFromJson(jsonObjects, englishWordEntities);
         addSynonym(db, synonymEntities);
-        synonymEntities = null;
         Log.d(TAG, "populateWithTestData: synonym added");
 
         //store synonym in database
         AntonymEntity[] antonymEntities = getAntonymEntitiesFromJson(jsonObjects, englishWordEntities);
         addAntonym(db, antonymEntities);
-        antonymEntities = null;
         Log.d(TAG, "populateWithTestData: antonym added" + db.antonymDao().loadAllAntonym().length);
 
         //store max min weight
@@ -122,8 +119,8 @@ public class DatabaseInitializer {
         }
         ArrayList<SynonymEntity> synonymEntityArrayList = new ArrayList<>();
         for (EnglishWordEntity englishWordEntity : englishWordEntities) {
-            JSONObject enInnerOject = jsonObjects.getJSONObject(englishWordEntity.getText());
-            JSONObject synonymsObject = enInnerOject.getJSONObject("syn");
+            JSONObject enInnerObject = jsonObjects.getJSONObject(englishWordEntity.getText());
+            JSONObject synonymsObject = enInnerObject.getJSONObject("syn");
             int synonymArrayLen = synonymsObject.length();
             for (Iterator iterator = synonymsObject.keys(); iterator.hasNext(); ) {
                 String synonym = (String) iterator.next();
@@ -145,8 +142,8 @@ public class DatabaseInitializer {
         }
         ArrayList<AntonymEntity> antonymEntityArrayList = new ArrayList<>();
         for (EnglishWordEntity englishWordEntity : englishWordEntities) {
-            JSONObject enInnerOject = jsonObjects.getJSONObject(englishWordEntity.getText());
-            JSONArray antonymArray = enInnerOject.getJSONArray("ant");
+            JSONObject enInnerObject = jsonObjects.getJSONObject(englishWordEntity.getText());
+            JSONArray antonymArray = enInnerObject.getJSONArray("ant");
             int AntonymArrayLen = antonymArray.length();
             for (int j = 0; j < AntonymArrayLen; j++) {
                 String antonym = antonymArray.getString(j);
@@ -163,8 +160,8 @@ public class DatabaseInitializer {
     private static BanglaWordEntity[] getBanglaWordEntitiesFromJson(JSONObject jsonObjects, EnglishWordEntity[] englishWordEntitys) throws JSONException {
         ArrayList<BanglaWordEntity> banglaWordEntitiesArrayList = new ArrayList<>();
         for (EnglishWordEntity englishWordEntity : englishWordEntitys) {
-            JSONObject enInnerOject = jsonObjects.getJSONObject(englishWordEntity.getText());
-            JSONArray bnArray = enInnerOject.getJSONArray("bn");
+            JSONObject enInnerObject = jsonObjects.getJSONObject(englishWordEntity.getText());
+            JSONArray bnArray = enInnerObject.getJSONArray("bn");
             int bnArrayLen = bnArray.length();
             for (int j = 0; j < bnArrayLen; j++) {
                 banglaWordEntitiesArrayList.add(new BanglaWordEntity(bnArray.getString(j), englishWordEntity.getId()));
@@ -199,7 +196,6 @@ public class DatabaseInitializer {
             byte[] bytes = new byte[inputStream.available()];
             inputStream.read(bytes, 0, inputStream.available());
             json = new String(bytes);
-            bytes = null;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -209,7 +205,7 @@ public class DatabaseInitializer {
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
         private final AppDatabase mDb;
         private final Activity context;
-        ProgressDialog progDailog;
+        ProgressDialog progressDialog;
 
         PopulateDbAsync(AppDatabase db, Activity context) {
             mDb = db;
@@ -233,12 +229,12 @@ public class DatabaseInitializer {
             super.onPreExecute();
             super.onPreExecute();
 
-            progDailog = new ProgressDialog(this.context);
-            progDailog.setMessage("Building Database...");
-            progDailog.setIndeterminate(false);
-            progDailog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progDailog.setCancelable(false);
-            progDailog.show();
+            progressDialog = new ProgressDialog(this.context);
+            progressDialog.setMessage("Building Database...");
+            progressDialog.setIndeterminate(false);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
         }
 
         @Override
@@ -250,9 +246,9 @@ public class DatabaseInitializer {
             editor.putBoolean("dbModified", false);
             editor.putBoolean("lastWordMisspelled", false);
             editor.putBoolean("lastWordSaved", true);
-            final boolean commit = editor.commit();
+            editor.apply();
             super.onPostExecute(aVoid);
-            progDailog.dismiss();
+            progressDialog.dismiss();
             context.recreate();
 
         }

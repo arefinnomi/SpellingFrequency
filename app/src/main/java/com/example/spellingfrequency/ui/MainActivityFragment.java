@@ -1,4 +1,4 @@
-package com.example.spellingfrequency.UI;
+package com.example.spellingfrequency.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -40,24 +40,23 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class MainActivityFragment extends Fragment {
     /*var*/
-    Word word = null;
-    boolean nowWordDisplayed = false;
-    boolean isWordDisplayed = false;
-    boolean isUserMisspelled = false;
+    private Word word = null;
+    private boolean nowWordDisplayed = false;
+    private boolean isUserMisspelled = false;
 //    boolean isFavorite;
 
     /*view*/
-    TextView wordTextView;
-    Button listenButton;
-    Button errorButton;
-    Button masteredButton;
-    TextToSpeech textToSpeech;
-    TextView translationTextView;
-    Button input_button;
-    TextInputEditText spellingInputEditText;
-    Statistics statistics;
+    private TextView wordTextView;
+    private Button listenButton;
+    private Button errorButton;
+    private Button masteredButton;
+    private TextToSpeech textToSpeech;
+    private TextView translationTextView;
+    private Button input_button;
+    private TextInputEditText spellingInputEditText;
+    private Statistics statistics;
 
-    public static void hideKeyboard(Activity activity) {
+    private static void hideKeyboard(Activity activity) {
         View view = activity.findViewById(android.R.id.content);
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -82,7 +81,7 @@ public class MainActivityFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         setViewAndListener(appDatabase, sharedPref, view);
-        load_word_to_view(appDatabase, sharedPref, view);
+        load_word_to_view(appDatabase, sharedPref);
 
         return view;
     }
@@ -103,7 +102,6 @@ public class MainActivityFragment extends Fragment {
     private void resetAllView() {
         word = null;
         nowWordDisplayed = false;
-        isWordDisplayed = false;
         isUserMisspelled = false;
 
         masteredButton.setEnabled(true);
@@ -117,7 +115,7 @@ public class MainActivityFragment extends Fragment {
         hideKeyboard(getActivity());
     }
 
-    void checkInputSpelling(SharedPreferences sharedPref) {
+    private void checkInputSpelling(SharedPreferences sharedPref) {
         String userSpelling = spellingInputEditText.getText().toString();
 
         if (userSpelling.isEmpty()) return;
@@ -150,7 +148,7 @@ public class MainActivityFragment extends Fragment {
         editor.apply();
     }
 
-    private void load_word_to_view(AppDatabase appDatabase, SharedPreferences sharedPref, View view) {
+    private void load_word_to_view(AppDatabase appDatabase, SharedPreferences sharedPref) {
         if (sharedPref.getBoolean("init", false)) {
             resetAllView();
             word = new Word(appDatabase);
@@ -227,7 +225,6 @@ public class MainActivityFragment extends Fragment {
         wordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isWordDisplayed = true;
                 if (nowWordDisplayed) {
                     resetWordTextView();
                 } else if (isUserMisspelled) {
@@ -244,7 +241,7 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 saveDatabaseSharedPref(sharedPref, true);
-                load_word_to_view(appDatabase, sharedPref, view);
+                load_word_to_view(appDatabase, sharedPref);
             }
         });
 
@@ -258,7 +255,7 @@ public class MainActivityFragment extends Fragment {
                     return;
                 }
                 saveDatabaseSharedPref(sharedPref, false);
-                load_word_to_view(appDatabase, sharedPref, view);
+                load_word_to_view(appDatabase, sharedPref);
             }
         });
 
@@ -280,7 +277,7 @@ public class MainActivityFragment extends Fragment {
                     textToSpeech.speak(word.getWord(), TextToSpeech.QUEUE_FLUSH, null);
             }
         });
-        spellingInputEditText = view.findViewById(R.id.spellingInput);
+        spellingInputEditText = view.findViewById(R.id.spelling_input);
         spellingInputEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -328,7 +325,7 @@ public class MainActivityFragment extends Fragment {
                 } else {
                     Toast.makeText(getActivity(), "added to favorite", Toast.LENGTH_SHORT).show();
                     SharedPreferences sharedPref = getContext().getSharedPreferences(
-                            getString(R.string.preference_file_key), MODE_PRIVATE);;
+                            getString(R.string.preference_file_key), MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putBoolean("dbModified", true);
                     editor.apply();
@@ -361,5 +358,11 @@ public class MainActivityFragment extends Fragment {
 
 
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        textToSpeech.shutdown();
     }
 }

@@ -1,4 +1,4 @@
-package com.example.spellingfrequency.UI;
+package com.example.spellingfrequency.ui;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -41,10 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        return super.onOptionsItemSelected(item);
     }
 
 

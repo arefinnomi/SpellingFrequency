@@ -59,7 +59,7 @@ public class Synchronization {
             alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
                 @Override
                 public void onShow(DialogInterface dialogInterface) {
-                    final Button loginButton = ((AlertDialog) alertDialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                    final Button loginButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
                     loginButton.setOnClickListener(new View.OnClickListener() {
 
                         @Override
@@ -117,17 +117,16 @@ public class Synchronization {
             return;
         }
         final String uID = currentUser.getUid();
-        final ProgressDialog progDailog = new ProgressDialog(context);
-        progDailog.setMessage("Synchronizing...");
-        progDailog.setIndeterminate(false);
-        progDailog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progDailog.setCancelable(false);
-        progDailog.show();
+        final ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Synchronizing...");
+        progressDialog.setIndeterminate(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
         final AppDatabase db = AppDatabase.getDatabase(context);
         final FirebaseFirestore fdb = FirebaseFirestore.getInstance();
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setTimestampsInSnapshotsEnabled(true)
                 .build();
         fdb.setFirestoreSettings(settings);
 
@@ -139,21 +138,21 @@ public class Synchronization {
                     DocumentSnapshot document = task.getResult();
                     if (document != null) {
                         if (document.exists()) {
-                            long fchanged = document.getLong("changedCount");
-                            if (fchanged < getContChanged(db)) {
-                                push(context, fdb, db, progDailog, uID);
-                            } else if (fchanged > getContChanged(db)) {
+                            long changedFromRemote = document.getLong("changedCount");
+                            if (changedFromRemote < getContChanged(db)) {
+                                push(context, fdb, db, progressDialog, uID);
+                            } else if (changedFromRemote > getContChanged(db)) {
 
-                                pull(context, fdb, db, progDailog, uID);
+                                pull(context, fdb, db, progressDialog, uID);
                             } else {
-                                progDailog.dismiss();
+                                progressDialog.dismiss();
 
                                 SharedPreferences sharedPref = context.getSharedPreferences(
                                         context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
                                 if (!sharedPref.getBoolean("dbModified", false))
                                     Toast.makeText(context, "no change found", Toast.LENGTH_SHORT).show();
                                 else {
-                                    push(context, fdb, db, progDailog, uID);
+                                    push(context, fdb, db, progressDialog, uID);
                                     SharedPreferences.Editor editor = sharedPref.edit();
                                     editor.putBoolean("dbModified", false);
                                     editor.apply();
@@ -162,7 +161,7 @@ public class Synchronization {
                             }
                         } else {
                             Log.d(TAG, "No such document");
-                            push(context, fdb, db, progDailog, uID);
+                            push(context, fdb, db, progressDialog, uID);
                         }
                     }
                 } else {
@@ -174,10 +173,10 @@ public class Synchronization {
     }
 
 
-    private static void pull(final Context context, FirebaseFirestore fdb, final AppDatabase db, final ProgressDialog progDailog, String uID) {
-        progDailog.setMessage("downloading from server...");
-        DocumentReference fjson = fdb.collection("backups").document(uID);
-        fjson.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+    private static void pull(final Context context, FirebaseFirestore fdb, final AppDatabase db, final ProgressDialog progressDialog, String uID) {
+        progressDialog.setMessage("downloading from server...");
+        DocumentReference jsonFromRemote = fdb.collection("backups").document(uID);
+        jsonFromRemote.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 DocumentSnapshot document = task.getResult();
@@ -191,11 +190,11 @@ public class Synchronization {
                             db.currentWeightDao().updateCurrentWeight(mergedData.currentWeightEntities[i]);
                         }
                         for (int i = 0; i < mergedData.englishWordEntities.length; i++) {
-                            progDailog.setMessage("total changes: " + mergedData.englishWordEntities.length + " words\nupdated: " + i + 1 + " word(s)");
+                            progressDialog.setMessage("total changes: " + mergedData.englishWordEntities.length + " words\nupdated: " + i + 1 + " word(s)");
                             EnglishWordEntity wordEntity = mergedData.englishWordEntities[i];
                             db.englishWordDao().updateWeightFabRepeat(wordEntity.getId(), wordEntity.getWeight(), wordEntity.getRepeat(), wordEntity.isFavourite());
                         }
-                        progDailog.dismiss();
+                        progressDialog.dismiss();
                         Toast.makeText(context, mergedData.englishWordEntities.length + " local words is updated", Toast.LENGTH_SHORT).show();
 
                     }
@@ -205,21 +204,21 @@ public class Synchronization {
         });
     }
 
-    private static void push(Context context, FirebaseFirestore fdb, final AppDatabase db, ProgressDialog progDailog, String uID) {
-        progDailog.setMessage("Uploading to server...");
+    private static void push(Context context, FirebaseFirestore fdb, final AppDatabase db, ProgressDialog progressDialog, String uID) {
+        progressDialog.setMessage("Uploading to server...");
         String json = generateJson(db);
         int contChanged = getContChanged(db);
-        CollectionReference fjson = fdb.collection("backups");
-        Map<String, Object> datajson = new HashMap<>();
-        datajson.put("json", json);
-        fjson.document(uID).set(datajson);
+        CollectionReference jsonCollectionRef = fdb.collection("backups");
+        Map<String, Object> jsonMap = new HashMap<>();
+        jsonMap.put("json", json);
+        jsonCollectionRef.document(uID).set(jsonMap);
 
-        CollectionReference fcount = fdb.collection("counts");
-        Map<String, Object> datacount = new HashMap<>();
-        datacount.put("changedCount", contChanged);
-        fcount.document(uID).set(datacount);
-        progDailog.setMessage("changes is uploaded to remote server");
-        progDailog.dismiss();
+        CollectionReference countFromRemote = fdb.collection("counts");
+        Map<String, Object> countMap = new HashMap<>();
+        countMap.put("changedCount", contChanged);
+        countFromRemote.document(uID).set(countMap);
+        progressDialog.setMessage("changes is uploaded to remote server");
+        progressDialog.dismiss();
         Toast.makeText(context, "remote server is updated", Toast.LENGTH_SHORT).show();
     }
 
@@ -237,25 +236,10 @@ public class Synchronization {
         CurrentWeightEntity[] currentWeightEntities;
         EnglishWordEntity[] englishWordEntities;
 
-        public MergedData(CurrentWeightEntity[] currentWeightEntities, EnglishWordEntity[] englishWordEntities) {
+        MergedData(CurrentWeightEntity[] currentWeightEntities, EnglishWordEntity[] englishWordEntities) {
             this.currentWeightEntities = currentWeightEntities;
             this.englishWordEntities = englishWordEntities;
         }
 
-        public CurrentWeightEntity[] getCurrentWeightEntities() {
-            return currentWeightEntities;
-        }
-
-        public void setCurrentWeightEntities(CurrentWeightEntity[] currentWeightEntities) {
-            this.currentWeightEntities = currentWeightEntities;
-        }
-
-        public EnglishWordEntity[] getEnglishWordEntities() {
-            return englishWordEntities;
-        }
-
-        public void setEnglishWordEntities(EnglishWordEntity[] englishWordEntities) {
-            this.englishWordEntities = englishWordEntities;
-        }
     }
 }

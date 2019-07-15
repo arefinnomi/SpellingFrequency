@@ -14,30 +14,6 @@ public class Statistics {
         Statistics.appDatabase = appDatabase;
     }
 
-    public static int getTotalWord() {
-        return totalWord;
-    }
-
-    public static void setTotalWord(int totalWord) {
-        Statistics.totalWord = totalWord;
-    }
-
-    public static int getMastered() {
-        return mastered;
-    }
-
-    public static void setMastered(int mastered) {
-        Statistics.mastered = mastered;
-    }
-
-    public static int getMistaken() {
-        return mistaken;
-    }
-
-    public static void setMistaken(int mistaken) {
-        Statistics.mistaken = mistaken;
-    }
-
     public String update() {
         totalWord = appDatabase.englishWordDao().totalEnglishWord();
         mastered = appDatabase.englishWordDao().countMasteredWord();
