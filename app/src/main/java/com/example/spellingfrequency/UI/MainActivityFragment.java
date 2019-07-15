@@ -297,6 +297,11 @@ public class MainActivityFragment extends Fragment {
                     Toast.makeText(getActivity(), "already in favorite", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getActivity(), "added to favorite", Toast.LENGTH_SHORT).show();
+                    SharedPreferences sharedPref = getContext().getSharedPreferences(
+                            getString(R.string.preference_file_key), MODE_PRIVATE);;
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putBoolean("dbModified", true);
+                    editor.apply();
                     word.saveFavorite(!word.isFavorite());
                 }
                 return true;

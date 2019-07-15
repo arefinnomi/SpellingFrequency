@@ -1,5 +1,6 @@
 package com.example.spellingfrequency.UI;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
@@ -51,6 +52,11 @@ public class WordDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_favorite_word_details: {
+                SharedPreferences sharedPref = this.getSharedPreferences(
+                        getString(R.string.preference_file_key), MODE_PRIVATE);;
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putBoolean("dbModified", true);
+                editor.apply();
                 word.saveFavorite(!word.isFavorite());
                 if (word.isFavorite()) {
                     item.setIcon(R.drawable.ic_favorite_red);
