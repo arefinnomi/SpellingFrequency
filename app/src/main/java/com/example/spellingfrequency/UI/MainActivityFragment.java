@@ -8,12 +8,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.text.method.ScrollingMovementMethod;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
@@ -25,7 +27,7 @@ import com.example.spellingfrequency.R;
 import com.example.spellingfrequency.database.AppDatabase;
 import com.example.spellingfrequency.database.entity.BanglaWordEntity;
 import com.example.spellingfrequency.database.entity.EnglishWordEntity;
-import com.example.spellingfrequency.internet.Synchronization;
+import com.example.spellingfrequency.utilities.Synchronization;
 import com.example.spellingfrequency.model.Statistics;
 import com.example.spellingfrequency.model.Word;
 import com.google.android.material.textfield.TextInputEditText;
@@ -52,7 +54,7 @@ public class MainActivityFragment extends Fragment {
     TextToSpeech textToSpeech;
     TextView translationTextView;
     Button input_button;
-    TextInputEditText speelingInputEditText;
+    TextInputEditText spellingInputEditText;
     Statistics statistics;
 
     public static void hideKeyboard(Activity activity) {
@@ -106,17 +108,17 @@ public class MainActivityFragment extends Fragment {
 
         masteredButton.setEnabled(true);
         errorButton.setEnabled(true);
-        speelingInputEditText.setEnabled(true);
+        spellingInputEditText.setEnabled(true);
         input_button.setEnabled(true);
         resetWordTextView();
         translationTextView.setText("");
         translationTextView.scrollTo(0, 0);
-        speelingInputEditText.setText(null);
+        spellingInputEditText.setText(null);
         hideKeyboard(getActivity());
     }
 
-    void checkInputSpelling() {
-        String userSpelling = speelingInputEditText.getText().toString();
+    void checkInputSpelling(SharedPreferences sharedPref) {
+        String userSpelling = spellingInputEditText.getText().toString();
 
         if (userSpelling.isEmpty()) return;
         isUserMisspelled = !word.getWord().equals(userSpelling.toLowerCase().trim());
@@ -130,8 +132,9 @@ public class MainActivityFragment extends Fragment {
             String temp = Arrays.toString(Character.toChars(10004))
                     + userSpelling
                     + Arrays.toString(Character.toChars(10004));
-            speelingInputEditText.setText(temp);
-            speelingInputEditText.setEnabled(false);
+            spellingInputEditText.setText(temp);
+            spellingInputEditText.setEnabled(false);
+            input_button.setEnabled(false);
             hideKeyboard(getActivity());
             setWordTextView();
             wordTextView.setEnabled(false);
@@ -139,13 +142,27 @@ public class MainActivityFragment extends Fragment {
                 errorButton.setEnabled(false);
             }
         }
-
+        SharedPreferences.Editor editor = sharedPref.edit();
+        if(sharedPref.getBoolean("lastWordSaved", true) ){
+            editor.putBoolean("lastWordMisspelled", isUserMisspelled);
+        }
+        editor.putBoolean("lastWordSaved", false);
+        editor.apply();
     }
 
     private void load_word_to_view(AppDatabase appDatabase, SharedPreferences sharedPref, View view) {
         if (sharedPref.getBoolean("init", false)) {
             resetAllView();
             word = new Word(appDatabase);
+            if(!sharedPref.getBoolean("lastWordSaved", true)){
+                if (!sharedPref.getBoolean("lastWordMisspelled", false)){
+                    word.loadNextWord();
+                    saveDatabaseSharedPref(sharedPref,true);
+                }else {
+                    isUserMisspelled = true;
+                    masteredButton.setEnabled(false);
+                }
+            }
             word.loadNextWord();
             if (word != null && !textToSpeech.isSpeaking())
                 textToSpeech.speak(word.getWord(), TextToSpeech.QUEUE_FLUSH, null);
@@ -217,7 +234,7 @@ public class MainActivityFragment extends Fragment {
                     setWordTextView();
                 } else {
                     setWordTextView();
-                    speelingInputEditText.setEnabled(false);
+                    spellingInputEditText.setEnabled(false);
                     input_button.setEnabled(false);
                 }
             }
@@ -226,10 +243,7 @@ public class MainActivityFragment extends Fragment {
         masteredButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                word.saveCurrentWordStatus(true);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putBoolean("dbModified", true);
-                editor.apply();
+                saveDatabaseSharedPref(sharedPref, true);
                 load_word_to_view(appDatabase, sharedPref, view);
             }
         });
@@ -243,10 +257,7 @@ public class MainActivityFragment extends Fragment {
                     Toast.makeText(getActivity(), "Write correct spelling", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                word.saveCurrentWordStatus(false);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putBoolean("dbModified", true);
-                editor.apply();
+                saveDatabaseSharedPref(sharedPref, false);
                 load_word_to_view(appDatabase, sharedPref, view);
             }
         });
@@ -269,15 +280,34 @@ public class MainActivityFragment extends Fragment {
                     textToSpeech.speak(word.getWord(), TextToSpeech.QUEUE_FLUSH, null);
             }
         });
-        speelingInputEditText = view.findViewById(R.id.spellingInput);
-
+        spellingInputEditText = view.findViewById(R.id.spellingInput);
+        spellingInputEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == EditorInfo.IME_ACTION_DONE) {
+                    checkInputSpelling(sharedPref);
+                    return true;
+                }
+                return false;
+            }
+        });
         input_button = view.findViewById(R.id.input_button);
         input_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkInputSpelling();
+                checkInputSpelling(sharedPref);
             }
         });
+
+    }
+
+    private void saveDatabaseSharedPref(SharedPreferences sharedPref, boolean b) {
+        word.saveCurrentWordStatus(b);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean("dbModified", true);
+        editor.putBoolean("lastWordMisspelled", false);
+        editor.putBoolean("lastWordSaved", true);
+        editor.apply();
     }
 
     @Override

@@ -248,6 +248,8 @@ public class DatabaseInitializer {
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putBoolean("init", true);
             editor.putBoolean("dbModified", false);
+            editor.putBoolean("lastWordMisspelled", false);
+            editor.putBoolean("lastWordSaved", true);
             final boolean commit = editor.commit();
             super.onPostExecute(aVoid);
             progDailog.dismiss();

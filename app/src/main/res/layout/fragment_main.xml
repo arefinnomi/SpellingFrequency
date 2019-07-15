@@ -81,7 +81,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:hint="spelling"
-            android:inputType="textFilter"
+            android:inputType="textVisiblePassword"
             android:singleLine="true" />
 
         <Button
