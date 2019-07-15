@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
-import com.google.android.material.textfield.TextInputEditText;
-import androidx.fragment.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,6 +19,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+
 import com.example.spellingfrequency.R;
 import com.example.spellingfrequency.database.AppDatabase;
 import com.example.spellingfrequency.database.entity.BanglaWordEntity;
@@ -28,6 +28,7 @@ import com.example.spellingfrequency.database.entity.EnglishWordEntity;
 import com.example.spellingfrequency.internet.Synchronization;
 import com.example.spellingfrequency.model.Statistics;
 import com.example.spellingfrequency.model.Word;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Arrays;
 import java.util.Locale;
@@ -134,6 +135,9 @@ public class MainActivityFragment extends Fragment {
             hideKeyboard(getActivity());
             setWordTextView();
             wordTextView.setEnabled(false);
+            if (masteredButton.isEnabled()) {
+                errorButton.setEnabled(false);
+            }
         }
 
     }
@@ -223,6 +227,9 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 word.saveCurrentWordStatus(true);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putBoolean("dbModified", true);
+                editor.apply();
                 load_word_to_view(appDatabase, sharedPref, view);
             }
         });
@@ -237,6 +244,9 @@ public class MainActivityFragment extends Fragment {
                     return;
                 }
                 word.saveCurrentWordStatus(false);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putBoolean("dbModified", true);
+                editor.apply();
                 load_word_to_view(appDatabase, sharedPref, view);
             }
         });
@@ -302,9 +312,12 @@ public class MainActivityFragment extends Fragment {
             case R.id.action_show_favorites: {
                 Intent intent = new Intent(getActivity(), FavoriteListActivity.class);
                 startActivity(intent);
+                return true;
             }
             case R.id.action_sync: {
+
                 Synchronization.synchronize(getContext());
+                return true;
             }
             default:
                 // If we got here, the user's action was not recognized.

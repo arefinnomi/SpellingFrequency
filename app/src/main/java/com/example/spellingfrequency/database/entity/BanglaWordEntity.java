@@ -1,11 +1,11 @@
 package com.example.spellingfrequency.database.entity;
 
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
-import androidx.annotation.NonNull;
 
 @Entity(tableName = "BanglaWord",
         indices = {@Index(value = {"text"})},

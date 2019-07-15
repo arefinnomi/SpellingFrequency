@@ -1,9 +1,9 @@
 package com.example.spellingfrequency.database.entity;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
-import androidx.annotation.NonNull;
 
 
 @Entity(tableName = "Antonym", foreignKeys = {

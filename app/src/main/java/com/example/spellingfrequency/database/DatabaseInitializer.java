@@ -6,8 +6,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import androidx.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.example.spellingfrequency.R;
 import com.example.spellingfrequency.database.dao.EnglishWordDao;
@@ -246,6 +247,7 @@ public class DatabaseInitializer {
                     context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putBoolean("init", true);
+            editor.putBoolean("dbModified", false);
             final boolean commit = editor.commit();
             super.onPostExecute(aVoid);
             progDailog.dismiss();

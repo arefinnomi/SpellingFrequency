@@ -2,10 +2,11 @@ package com.example.spellingfrequency.UI;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.spellingfrequency.R;
 import com.example.spellingfrequency.database.AppDatabase;

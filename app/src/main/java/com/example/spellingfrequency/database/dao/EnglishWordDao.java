@@ -37,6 +37,10 @@ public interface EnglishWordDao {
     @Query("UPDATE EnglishWord SET weight = :weight Where id = :id")
     void updateWeight(int id, int weight);
 
+
+    @Query("UPDATE EnglishWord SET weight = :weight, repeat = :repeat, favourite = :favourite Where id = :id")
+    void updateWeightFabRepeat(int id, int weight, int repeat, boolean favourite);
+
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void update(EnglishWordEntity englishWordEntity);
 
@@ -54,6 +58,9 @@ public interface EnglishWordDao {
 
     @Query("Select count(*) from EnglishWord where repeat != 0 and weight!= id")
     int countCurrentErrorEnglishWord();
+
+    @Query("Select count(*) from EnglishWord where weight!= id")
+    int countStudiedEnglishWord();
 
     @Query("Select * from EnglishWord where repeat != 0 and weight!= id")
     EnglishWordEntity[] loadAllCurrentErrorEnglishWord();
