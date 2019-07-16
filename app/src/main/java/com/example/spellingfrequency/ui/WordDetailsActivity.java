@@ -119,7 +119,7 @@ public class WordDetailsActivity extends AppCompatActivity {
         }
         TextView translationTextView = findViewById(R.id.wordDetails_translation_text_view);
         translationTextView.setText(temp.toString());
-        translationTextView.setMovementMethod(new ScrollingMovementMethod());
+//        translationTextView.setMovementMethod(new ScrollingMovementMethod());
 
     }
 

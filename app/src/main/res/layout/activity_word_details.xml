@@ -63,7 +63,9 @@
             android:textStyle="bold"
             android:typeface="monospace"
             android:visibility="visible"
-            app:fontFamily="monospace" />
+            app:fontFamily="monospace"
+            android:textIsSelectable="true"
+            android:text="@string/sample_multiline_text"/>
 
 
     </LinearLayout>

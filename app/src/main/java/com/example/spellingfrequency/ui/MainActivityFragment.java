@@ -219,7 +219,7 @@ public class MainActivityFragment extends Fragment {
 
     private void setViewAndListener(final AppDatabase appDatabase, final SharedPreferences sharedPref, final View view) {
         translationTextView = view.findViewById(R.id.translation_textview);
-        translationTextView.setMovementMethod(new ScrollingMovementMethod());
+//        translationTextView.setMovementMethod(new ScrollingMovementMethod());
 
         wordTextView = view.findViewById(R.id.word_textView);
         wordTextView.setOnClickListener(new View.OnClickListener() {
