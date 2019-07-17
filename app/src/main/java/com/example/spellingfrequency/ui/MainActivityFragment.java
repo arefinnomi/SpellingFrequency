@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -37,6 +39,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
+import static java.lang.Thread.*;
 
 public class MainActivityFragment extends Fragment {
     /*var*/
@@ -123,6 +126,7 @@ public class MainActivityFragment extends Fragment {
         if (isUserMisspelled) {
             masteredButton.setEnabled(false);
             errorButton.setEnabled(true);
+            spellingInputEditText.getText().clear();
             Toast.makeText(getActivity(), "wrong spelling", Toast.LENGTH_SHORT).show();
         } else {
 
@@ -289,6 +293,22 @@ public class MainActivityFragment extends Fragment {
             }
         });
         spellingInputEditText = view.findViewById(R.id.spelling_input);
+        spellingInputEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                resetWordTextView();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         spellingInputEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
