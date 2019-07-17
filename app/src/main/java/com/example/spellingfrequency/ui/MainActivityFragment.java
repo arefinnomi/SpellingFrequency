@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
-import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -52,7 +52,7 @@ public class MainActivityFragment extends Fragment {
     private Button masteredButton;
     private TextToSpeech textToSpeech;
     private TextView translationTextView;
-    private Button input_button;
+    private Button inputButton;
     private TextInputEditText spellingInputEditText;
     private Statistics statistics;
 
@@ -107,7 +107,7 @@ public class MainActivityFragment extends Fragment {
         masteredButton.setEnabled(true);
         errorButton.setEnabled(true);
         spellingInputEditText.setEnabled(true);
-        input_button.setEnabled(true);
+        inputButton.setEnabled(true);
         resetWordTextView();
         translationTextView.setText("");
         translationTextView.scrollTo(0, 0);
@@ -132,7 +132,10 @@ public class MainActivityFragment extends Fragment {
                     + Arrays.toString(Character.toChars(10004));
             spellingInputEditText.setText(temp);
             spellingInputEditText.setEnabled(false);
-            input_button.setEnabled(false);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putBoolean("lastWordInputDisabled", true);
+            editor.apply();
+            inputButton.setEnabled(false);
             hideKeyboard(getActivity());
             setWordTextView();
             wordTextView.setEnabled(false);
@@ -159,6 +162,11 @@ public class MainActivityFragment extends Fragment {
                 }else {
                     isUserMisspelled = true;
                     masteredButton.setEnabled(false);
+                }
+            }else {
+                if(sharedPref.getBoolean("lastWordInputDisabled", false)) {
+                    spellingInputEditText.setEnabled(false);
+                    inputButton.setEnabled(false);
                 }
             }
             word.loadNextWord();
@@ -232,7 +240,10 @@ public class MainActivityFragment extends Fragment {
                 } else {
                     setWordTextView();
                     spellingInputEditText.setEnabled(false);
-                    input_button.setEnabled(false);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putBoolean("lastWordInputDisabled", true);
+                    editor.apply();
+                    inputButton.setEnabled(false);
                 }
             }
         });
@@ -288,8 +299,8 @@ public class MainActivityFragment extends Fragment {
                 return false;
             }
         });
-        input_button = view.findViewById(R.id.input_button);
-        input_button.setOnClickListener(new View.OnClickListener() {
+        inputButton = view.findViewById(R.id.input_button);
+        inputButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 checkInputSpelling(sharedPref);
@@ -301,9 +312,10 @@ public class MainActivityFragment extends Fragment {
     private void saveDatabaseSharedPref(SharedPreferences sharedPref, boolean b) {
         word.saveCurrentWordStatus(b);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putBoolean("dbModified", true);
+        editor.putBoolean("dbModified", false);
         editor.putBoolean("lastWordMisspelled", false);
         editor.putBoolean("lastWordSaved", true);
+        editor.putBoolean("lastWordInputDisabled", false);
         editor.apply();
     }
 

@@ -246,6 +246,7 @@ public class DatabaseInitializer {
             editor.putBoolean("dbModified", false);
             editor.putBoolean("lastWordMisspelled", false);
             editor.putBoolean("lastWordSaved", true);
+            editor.putBoolean("lastWordInputDisabled", false);
             editor.apply();
             super.onPostExecute(aVoid);
             progressDialog.dismiss();
